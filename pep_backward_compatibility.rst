@@ -187,8 +187,32 @@ no knowledge of the specific ``__past__`` features invoked, or even
 that the ``__past__`` mechanism for backward-compatibility exists.
 
 
+Counter-Examples
+~~~~~~~~~~~~~~~~
+
+Some implementations of ``__past__`` mechanisms that would violate
+these criteria are:
+
+a. Import hooks. These would normally fail to work on a
+module-by-module basis; instead they apply recursively to all new
+modules imported from within a module.
+
+b. A new piece of syntax or new semantics for Python 3.6 that is
+incompatible with prior versions.
+
+c. A function added in Python 3.6 to a module in the Python standard
+library that exists under the same name in prior Python versions.
+
+
 Benefits
 ========
+
+The benefit to Python-dev of adopting this proposal is that future
+backward-incompatible changes can be less disruptive if these changes
+each have a corresponding ``__past__`` feature that has been
+implemented and can be invoked easily by users of future Python
+versions. This can help the language to evolve more quickly and more
+effectively to correct for design mistakes.
 
 The benefit to conservative users is obvious: they can add support for
 the latest shiny compatibility-breaking Python version to their code
@@ -202,12 +226,6 @@ package XYZ, and package XYZ can trivially add support for the latest
 Python version, those ten thousand users can also upgrade to the
 latest Python version quickly, without being held back waiting for
 package XYZ to do this.
-
-The benefit to Python-dev is that future backward-incompatible changes
-can be less disruptive if these changes each have a corresponding
-``__past__`` feature that has been implemented and can be invoked
-easily by users of future Python versions. This can help the language
-to evolve more quickly and more effectively to correct for design mistakes.
 
 
 Questions and answers
