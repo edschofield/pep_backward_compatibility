@@ -117,19 +117,17 @@ exchanges data files with, the more acute this pressure becomes.
 Proposal - part 1
 =================
 
-This PEP makes two specific proposals. The first proposal has two
-parts:
+This PEP makes two specific, related proposals. The first is that:
 
-1a. PEP 5 be augmented with a 6th step in the section "Steps for
+1. PEP 5 be augmented with a 6th step in the section "Steps for
 Introducing Backwards-Incompatible Features" to indicate that, when an
 incompatible change to core language syntax or semantics is being
 made, Python-dev's policy is to prefer and expect that, wherever
 possible, a mechanism for backward compatibility be considered and
 provided for future Python versions after the breaking change is
 adopted by default, in addition to any mechanisms proposed for forward
-compatibility such as new future_statements.
-
-1b. PEP 387, "Backwards Compatibility Policy" (if accepted) be
+compatibility such as new future_statements. Furthermore, PEP 387,
+"Backwards Compatibility Policy" (if accepted) would be
 augmented with the same 6th step.
 
 
@@ -187,7 +185,7 @@ no knowledge of the specific ``__past__`` features invoked, or even
 that the ``__past__`` mechanism for backward-compatibility exists.
 
 
-Counter-Examples
+Counter-examples
 ~~~~~~~~~~~~~~~~
 
 Some implementations of ``__past__`` mechanisms that would violate
