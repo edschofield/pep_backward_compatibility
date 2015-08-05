@@ -119,16 +119,16 @@ Proposal - part 1
 
 This PEP makes two specific, related proposals. The first is that:
 
-1. PEP 5 be augmented with a 6th step in the section "Steps for
-Introducing Backwards-Incompatible Features" to indicate that, when an
-incompatible change to core language syntax or semantics is being
-made, Python-dev's policy is to prefer and expect that, wherever
-possible, a mechanism for backward compatibility be considered and
-provided for future Python versions after the breaking change is
-adopted by default, in addition to any mechanisms proposed for forward
-compatibility such as new future_statements. Furthermore, PEP 387,
-"Backwards Compatibility Policy" (if accepted) would be
-augmented with the same 6th step.
+    PEP 5 be augmented with a 6th step in the section "Steps for
+    Introducing Backwards-Incompatible Features" to indicate that, when an
+    incompatible change to core language syntax or semantics is being
+    made, Python-dev's policy is to prefer and expect that, wherever
+    possible, a mechanism for backward compatibility be considered and
+    provided for future Python versions after the breaking change is
+    adopted by default, in addition to any mechanisms proposed for forward
+    compatibility such as new future_statements. Furthermore, PEP 387,
+    "Backwards Compatibility Policy" (if accepted) would be
+    augmented with the same 6th step.
 
 
 Example
@@ -157,9 +157,9 @@ Proposal - part 2
 
 The second proposal is that:
 
-2. Python provide a standard backward compatibility mechanism in
-parallel to the ``__future__`` module mechanism for forward
-compatibility.
+    Python provide a standard backward compatibility mechanism in
+    parallel to the ``__future__`` module mechanism for forward
+    compatibility.
 
 For reference, this document will refer to this as a "``__past__``
 mechanism" hereon, although it need not have all the characteristics
@@ -229,57 +229,59 @@ package XYZ to do this.
 Questions and answers
 =====================
 
-Q1: Does this PEP require that Python keep two possible sets of semantics
-for each backward-incompatible feature forever?
+**Q1:** Does this PEP require that Python keep two possible sets of semantics
+        for each backward-incompatible feature forever?
 
-A1: Definitely not. Legacy features can still be phased out when
-appropriate -- that is, when the majority of the user-base has
-migrated to the newer Python version. This PEP merely proposes to
-shift the emphasis of the development effort directed at compatibility
-from 100% forwards to at least 50% backwards. Backwards compatibility
-is the more powerful of the two concepts for allowing a user-base to
-adopt the latest Python interpreter version.
+**A1:** Definitely not. Legacy features can still be phased out when
+        appropriate -- that is, when the majority of the user-base has
+        migrated to the newer Python version. This PEP merely proposes to
+        shift the emphasis of the development effort directed at compatibility
+        from 100% forwards to at least 50% backwards. Backwards compatibility
+        is the more powerful of the two concepts for allowing a user-base to
+        adopt the latest Python interpreter version.
+        
+        Notice that it has been a long time since most users have cared about
+        backwards compatibility for non-nested scopes, because most users have
+        moved comfortably past Python 2.1.
 
-Notice that it has been a long time since users have cared about
-backwards compatibility for non-nested scopes, because very few users
-are stuck with Python 2.1.
 
-Q2: But Python-dev is already overwhelmed and doesn't have the
-bandwidth to implement / maintain the additional complexity!
+**Q2:** But Python-dev is already overwhelmed and doesn't have the
+        bandwidth to implement / maintain the additional complexity!
 
-A2: Python-dev can ask the community of developers to step up and
-maintain backward compatibility in Python for legacy language features
-they care about. When the community stops caring about a particular
-obsolete behaviour, Python-dev can stop caring too. 
+**A2:** Python-dev can ask the community of developers to step up and
+        maintain backward compatibility in Python for legacy language features
+        they care about. When the community stops caring about a particular
+        obsolete behaviour, Python-dev can stop caring too. 
+        
+        The ``__past__`` mechanism could possibly be designed to be extensible
+        by the community, e.g.  as a standard but "blessed" PyPI package, to
+        reduce the load on the core developers.
 
-The ``__past__`` mechanism could possibly be designed to be extensible
-by the community, e.g.  as a standard but "blessed" PyPI package, to
-reduce the load on the core developers.
+**Q3:** Won't backward compatibility features lead to lots of cruft and
+        bloat and baggage in Python?
 
-Q3: Won't backward compatibility features lead to lots of cruft and
-bloat and baggage in Python?
+**A3:** Not necessarily. First, proposals for new compatibility-breaking
+        features in Python could be evaluated partly on the simplicity and
+        maintainability of the implementation of their associated ``__past__``
+        feature up-front.
+        
+        Second, some old features are simple to provide backward compatibility
+        for. Consider the "classic division" behaviour before Python 3.0. The
+        ``python-future`` project contains a compatible implementation of
+        classic division in the function ``future.utils.old_div``:
 
-A3: Not necessarily. First, proposals for new compatibility-breaking
-features in Python could be evaluated partly on the simplicity and
-maintainability of the implementation of their associated ``__past__``
-feature up-front.
+::
 
-Second, some old features are simple to provide backward compatibility
-for. Consider the "classic division" behaviour before Python 3.0. The
-``python-future`` project contains a compatible implementation of
-classic division in the function ``future.utils.old_div``:
+    def old_div(a, b):
+        """
+        Equivalent to ``a / b`` on Python 2 without ``from __future__ import
+        division``.
+        """
+        if isinstance(a, numbers.Integral) and isinstance(b, numbers.Integral):
+            return a // b
+        else:
+            return a / b
 
-```
-def old_div(a, b):
-    """
-    Equivalent to ``a / b`` on Python 2 without ``from __future__ import
-    division``.
-    """
-    if isinstance(a, numbers.Integral) and isinstance(b, numbers.Integral):
-        return a // b
-    else:
-        return a / b
-```
 
 Bundling such a function with Python 3.x versions, together with
 a simple mechanism to invoke it for every appearance of ``a
@@ -287,14 +289,14 @@ a simple mechanism to invoke it for every appearance of ``a
 onerous.
 
 
-Q4: What about performance? Won't the performance of newer Python
-versions suffer under the weight of legacy features?
+**Q4:** What about performance? Won't the performance of newer Python
+        versions suffer under the weight of legacy features?
 
-A4: This can be evaluated on a case-by-case basis. The major potential
-concern is that the performance with the new default behaviour does
-not suffer unduly because of the presence of the legacy option. The
-performance under the influence of the ``__past__`` invocation is of
-secondary importance.
+**A4:** This can be evaluated on a case-by-case basis. The major potential
+        concern is that the performance with the new default behaviour does
+        not suffer unduly because of the presence of the legacy option. The
+        performance under the influence of the ``__past__`` invocation is of
+        secondary importance.
 
 
 Copyright
