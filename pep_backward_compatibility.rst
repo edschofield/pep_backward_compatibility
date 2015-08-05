@@ -20,8 +20,10 @@ PEP 236 in support of PEP 5. PEP 236, "Back to the __future__",
 introduced a mechanism for forward compatibility but noted that a new
 mechanism for backward compatibility was outside the scope of that
 PEP. This PEP introduces such a mechanism for backward compatibility.
+It also supports the policy proposed in PEP 387, "Policy for Backward
+Compatibility".
 
-PEP 5, "Guidelines for Language Evolution", notes that "This PEP [5]
+PEP 5, "Guidelines for Language Evolution", notes that "This PEP [PEP 5]
 does not replace or preclude other compatibility strategies such as
 dynamic loading of backwards-compatible parsers."
 
@@ -56,7 +58,8 @@ the new syntax or semantics, but provides no corresponding standard
 mechanism for providing backward compatibility after this release.
 
 
-Problem =======
+Problem
+=======
 
 A consequence of this asymmetry is that, with respect to a breaking
 change, the older (pre-breaking) version of the Python interpreter is
@@ -105,11 +108,11 @@ perfect; some features may be missing or the results may be otherwise
 suboptimal. Upgrading is therefore easy, whereas downgrading is
 harder.
 
-The emergent behaviour from a policy of backward compatibility over
-many users is that a natural pressure builds up on each individual
-user to upgrade his or her own application version, and, the more
-other users an individual exchanges data files with, the more acute
-this pressure becomes.
+The emergent behaviour over many users from a policy of backward
+compatibility plus new features is that a natural pressure builds up
+on each individual user to upgrade his or her own application version,
+and, the more other users an individual exchanges data files with, the
+more acute this pressure becomes.
 
 
 Proposal - part 1
@@ -124,8 +127,8 @@ incompatible change to core language syntax or semantics is being
 made, Python-dev's policy is to prefer and expect that, wherever
 possible, a mechanism for backward compatibility be provided for
 future versions after the breaking change is adopted by default, in
-addition to any mechanisms for forward compatibility such as the
-future_statement.
+addition to any mechanisms proposed for forward compatibility such as
+new future_statements.
 
 1b. PEP 387, "Backwards Compatibility Policy" (if accepted) be
 augmented with the same 6th step.
@@ -161,7 +164,7 @@ of the ``__future__`` module and ``future_statement`` mechanism.
 
 The specific form and implementation of the ``__past__`` mechanism is
 out of scope for this PEP. (Another PEP is in progress for this.)
-However, this PEP also recommends that this ``__past__`` mechanism be
+However, this PEP recommends that this ``__past__`` mechanism be
 designed around similar criteria to those outlined in PEP 296.
 Specifically:
 
@@ -192,19 +195,19 @@ modules imported from within a module.
 b. A new piece of syntax or new semantics for Python 3.6 that is
 incompatible with prior versions.
 
-c. A function added to an existing module in the Python standard
-library.
+c. A function added in Python 3.6 to a module in the Python standard
+library that exists under the same name in prior Python versions.
 
 
 Benefits
 ========
 
-The benefit to the conservative user is obvious: they can add support
-for the latest shiny compatibility-breaking Python version to their
-code merely by adding a ``__past__`` incantation (perhaps a single
-line) to each module, and that this can be automated. They can then
-upgrade their interpreter to the latest version and gain access to the
-latest shiny Python features.
+The benefit to conservative users is obvious: they can add support for
+the latest shiny compatibility-breaking Python version to their code
+merely by adding a ``__past__`` incantation (perhaps a single line) to
+each module, and that this can be automated. They can then upgrade
+their interpreter to the latest version and gain access to the latest
+shiny Python features.
 
 The benefit to the community is that, if ten thousand users rely on
 package XYZ, and package XYZ can trivially add support for the latest
@@ -213,7 +216,7 @@ latest Python version quickly, without being held back waiting for
 package XYZ to do this.
 
 The benefit to Python-dev is that future backward-incompatible changes
-can be less disruptive if these changes have a corresponding
+can be less disruptive if these changes each have a corresponding
 ``__past__`` feature that has been implemented and can be invoked
 easily by users of future Python versions. This can help the language
 to evolve more effectively to correct for design mistakes.
@@ -271,5 +274,4 @@ Copyright
 =========
 
 This document has been placed in the public domain.
-
 
