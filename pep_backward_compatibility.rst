@@ -48,8 +48,8 @@ PEP addressing them. future_statement is aimed at a different
 audience."
 
 
-Motivation
-==========
+The current situation
+=====================
 
 When an incompatible change to core language syntax or semantics is
 being made, Python currently provides the future_statement mechanism
@@ -107,11 +107,11 @@ perfect; some features may be missing or the results may be otherwise
 suboptimal. Upgrading is therefore easy, whereas downgrading is
 harder.
 
-The emergent behaviour over many users from a policy of backward
-compatibility plus new features is that a natural pressure builds up
-on each individual user to upgrade his or her own application version,
-and, the more other users an individual exchanges data files with, the
-more acute this pressure becomes.
+The emergent behaviour over many users from such a policy of new
+attractive features plus backward compatibility features is that a
+natural pressure builds up on each individual user to upgrade his or
+her own application version, and, the more other users an individual
+exchanges data files with, the more acute this pressure becomes.
 
 
 Proposal - part 1
@@ -133,8 +133,8 @@ compatibility such as new future_statements.
 augmented with the same 6th step.
 
 
-Examples
-~~~~~~~~
+Example
+~~~~~~~
 
 As an example of how this PEP is to be applied, if the latest revision
 of the "true division" PEP (238) were proposed today, it would be
@@ -185,22 +185,6 @@ c. It should be possible to run older code augmented to invoke
 ``__past__`` behaviours on older Python versions such as 2.x that have
 no knowledge of the specific ``__past__`` features invoked, or even
 that the ``__past__`` mechanism for backward-compatibility exists.
-
-
-Counter-Examples
-~~~~~~~~~~~~~~~~
-
-Some mechanisms that would violate these criteria are:
-
-a. Import hooks. These would normally fail to work on a
-module-by-module basis; instead they apply recursively to all new
-modules imported from within a module.
-
-b. A new piece of syntax or new semantics for Python 3.6 that is
-incompatible with prior versions.
-
-c. A function added in Python 3.6 to a module in the Python standard
-library that exists under the same name in prior Python versions.
 
 
 Benefits
@@ -283,8 +267,18 @@ def old_div(a, b):
 
 Bundling such a function with Python 3.x versions, together with
 a simple mechanism to invoke it for every appearance of ``a
-/ b`` after an appropriate ``__past__`` invocation, would not be
+/ b`` after an appropriate ``__past__`` invocation, need not be
 onerous.
+
+
+Q4: What about performance? Won't the performance of newer Python
+versions suffer under the weight of legacy features?
+
+A4: This can be evaluated on a case-by-case basis. The major potential
+concern is that the performance with the new default behaviour does
+not suffer unduly because of the presence of the legacy option. The
+performance under the influence of the ``__past__`` invocation is of
+secondary importance.
 
 
 Copyright
