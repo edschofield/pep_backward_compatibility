@@ -161,8 +161,8 @@ The second proposal is that:
     parallel to the ``__future__`` module mechanism for forward
     compatibility.
 
-For reference, this document will refer to this as a "``__past__``
-mechanism" hereon, although it need not have all the characteristics
+For reference, this document will refer to this as a "``__past__``"
+mechanism hereon, although it need not have all the characteristics
 of the ``__future__`` module and ``future_statement`` mechanism.
 
 The specific form and implementation of the ``__past__`` mechanism is
