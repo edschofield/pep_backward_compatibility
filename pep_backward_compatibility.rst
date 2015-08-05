@@ -15,13 +15,13 @@ Scope
 This PEP is complementary to PEPs 5, 236, and 387, and shares similar
 goals.
 
-This PEP introduces an additional compatibility mechanism to that of
-PEP 236 in support of PEP 5. PEP 236, "Back to the __future__",
-introduced a mechanism for forward compatibility but noted that a new
-mechanism for backward compatibility was outside the scope of that
-PEP. This PEP introduces such a mechanism for backward compatibility.
-It also supports the policy proposed in PEP 387, "Policy for Backward
-Compatibility".
+This PEP explains the need for an additional compatibility mechanism
+in support of PEP 5, "Guidelines for Language Evolution". PEP 236,
+"Back to the __future__", introduced a mechanism for forward
+compatibility in support of PEP 5 but noted that a new mechanism for
+backward compatibility was outside the scope of that PEP. A related
+PEP (in progress) introduces such a mechanism for backward
+compatibility.
 
 PEP 5, "Guidelines for Language Evolution", notes that "This PEP [PEP 5]
 does not replace or preclude other compatibility strategies such as
@@ -75,7 +75,7 @@ forward-compatibility mechanisms for "true division" in the Python 2.x
 series but omits to include any backward-compatibility mechanisms for
 after "true division" is first enforced in Python 3.0. Python versions
 since 3.0 do not provide a backward compatibility mechanism such as
-``from __past__ import divisio`` for code that expects the old
+``from __past__ import division`` for code that expects the old
 "classic division" semantics, whereas Python versions prior to 3.0 do
 support both "classic division" code and also forward compatibility
 with code expecting "true division". A further consequence of this is
@@ -142,7 +142,7 @@ of the "true division" PEP (238) were proposed today, it would be
 considered incomplete. PEP 238 describes several measures for forward
 compatibility in the Abstract and API Changes sections, and mentions
 some backward compatibility ideas raised on c.l.py, including "Use
-`from __past__ import division` to use classic division semantics in a
+``from __past__ import division`` to use classic division semantics in a
 module", but it does not put forward as part of the proposal any
 mechanisms for providing backward compatibility to newer Python
 versions to run old code after the incompatible change lands in Python
@@ -158,19 +158,18 @@ The second proposal is that:
 parallel to the ``__future__`` module mechanism for forward
 compatibility.
 
-For reference, this document will refer to this as a "__past__
+For reference, this document will refer to this as a "``__past__``
 mechanism" hereon, although it need not have all the characteristics
 of the ``__future__`` module and ``future_statement`` mechanism.
 
 The specific form and implementation of the ``__past__`` mechanism is
-out of scope for this PEP. (Another PEP is in progress for this.)
-However, this PEP recommends that this ``__past__`` mechanism be
-designed around similar criteria to those outlined in PEP 296.
+the subject of a separate PEP (in progress).  However, this PEP
+recommends that this ``__past__`` mechanism be designed to meet
+similar criteria to those outlined in PEP 296 for ``__future__``.
 Specifically:
 
-a. As with the ``__future__`` module, it should enable individual
-modules to specify obsolete behaviours to re-enable from older Python
-versions on a module-by-module basis.
+a. It should enable individual modules to specify obsolete behaviours
+to re-enable from older Python versions on a module-by-module basis.
 
 b. It should be flexible enough for both Python 3.6+ and point
 releases of earlier versions to reintroduce backward compatibility
@@ -189,7 +188,7 @@ Counter-Examples
 Some mechanisms that would violate these criteria are:
 
 a. Import hooks. These would normally fail to work on a
-module-by-module basis, and would instead apply recursively to all new
+module-by-module basis; instead they apply recursively to all new
 modules imported from within a module.
 
 b. A new piece of syntax or new semantics for Python 3.6 that is
@@ -265,9 +264,10 @@ bandwidth to implement / maintain the additional complexity!
 
 A2: Python-dev can ask the community of developers to step up and
 maintain backward compatibility in Python for legacy language features
-they care about. When the community stops caring, Python-dev can stop
-caring too. The ``__past__`` mechanism could also be designed to be
-extensible by the community to take the load off the core developers.
+they care about. When the community stops caring about a particular
+obsolete behaviour, Python-dev can stop caring too. The ``__past__``
+mechanism could be designed to be extensible by the community to
+reduce the load on the core developers.
 
 
 Copyright
