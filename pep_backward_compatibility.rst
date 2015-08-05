@@ -25,11 +25,9 @@ PEP 5, "Guidelines for Language Evolution", notes that "This PEP [5]
 does not replace or preclude other compatibility strategies such as
 dynamic loading of backwards-compatible parsers."
 
-This PEP proposes a mechanism to support PEP 387, "Backwards
-Compatibility Policy".
 
-
-Context =======
+Context
+=======
 
 From PEP 236: "From time to time, Python makes an incompatible change
 to the advertised semantics of core language constructs, or changes
@@ -129,7 +127,8 @@ future versions after the breaking change is adopted by default, in
 addition to any mechanisms for forward compatibility such as the
 future_statement.
 
-1b. PEP 387 be augmented with the same 6th step.
+1b. PEP 387, "Backwards Compatibility Policy" (if accepted) be
+augmented with the same 6th step.
 
 
 Example
