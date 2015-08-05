@@ -64,25 +64,24 @@ Problem
 A consequence of this asymmetry is that, with respect to a breaking
 change, the older (pre-breaking) version of the Python interpreter is
 more capable than the newer (breaking) version; the older interpreter
-can use both modules designed prior to the change and newer modules,
-whereas the newer interpreter is only capable of using modules that
-have been upgraded to support the changed feature.
+can use both code designed prior to the change and newer code, whereas
+the newer interpreter is only capable of using code that has been
+upgraded to support the changed feature.
 
 As an example, consider the changes to the division operator
 introduced in PEP 238 in 2001, soon after PEP 236 introduced the
 future_statement mechanism. PEP 238 outlines a suite of useful
 forward-compatibility mechanisms for "true division" in the Python 2.x
 series but omits to include any backward-compatibility mechanisms for
-after "true division" is first enforced in Python 3.0. Python versions
+after "true division" was first enforced in Python 3.0. Python versions
 since 3.0 do not provide a backward compatibility mechanism such as
 ``from __past__ import division`` for code that expects the old
 "classic division" semantics, whereas Python versions prior to 3.0 do
 support both "classic division" code and also forward compatibility
 with code expecting "true division". A further consequence of this is
 that the "most compatible" interpreter with respect to the variety of
-division-related Python code contained in books, blog posts, PyPI
-packages, and in-house codebases, is the one before the breaking
-change is first enforced.
+division-related Python code in the wild is Python 2.7, the version
+before the breaking change was first enforced.
 
 
 Backward compatibility as enabler for "downhill upgrades"
@@ -125,28 +124,34 @@ parts:
 Introducing Backwards-Incompatible Features" to indicate that, when an
 incompatible change to core language syntax or semantics is being
 made, Python-dev's policy is to prefer and expect that, wherever
-possible, a mechanism for backward compatibility be provided for
-future versions after the breaking change is adopted by default, in
-addition to any mechanisms proposed for forward compatibility such as
-new future_statements.
+possible, a mechanism for backward compatibility be considered and
+provided for future Python versions after the breaking change is
+adopted by default, in addition to any mechanisms proposed for forward
+compatibility such as new future_statements.
 
 1b. PEP 387, "Backwards Compatibility Policy" (if accepted) be
 augmented with the same 6th step.
 
 
-Example
-~~~~~~~
+Examples
+~~~~~~~~
 
 As an example of how this PEP is to be applied, if the latest revision
 of the "true division" PEP (238) were proposed today, it would be
-considered incomplete. PEP 238 describes several measures for forward
-compatibility in the Abstract and API Changes sections, and mentions
-some backward compatibility ideas raised on c.l.py, including "Use
-``from __past__ import division`` to use classic division semantics in a
-module", but it does not put forward as part of the proposal any
-mechanisms for providing backward compatibility to newer Python
-versions to run old code after the incompatible change lands in Python
-3.0.
+considered incomplete. PEP 238 notes the "severe backwards
+compatibility issues" raised by the proposal and describes several
+measures for forward compatibility in the Abstract and API Changes
+sections. It also mentions some backward compatibility ideas raised on
+c.l.py, including "Use ``from __past__ import division`` to use
+classic division semantics in a module", but it does not put forward
+any backward compatibility plan as part of the proposal.
+
+If this PEP is accepted, it would be expected that a proposal such as
+PEP 238, because of its large-scale compatibility implications, would
+also be accompanied by a backward compatibility plan that enables
+users of future Python versions after the breaking change has come
+into effect to re-enable the classic division behaviour easily in
+their code.
 
 
 Proposal - part 2
@@ -218,16 +223,43 @@ The benefit to Python-dev is that future backward-incompatible changes
 can be less disruptive if these changes each have a corresponding
 ``__past__`` feature that has been implemented and can be invoked
 easily by users of future Python versions. This can help the language
-to evolve more effectively to correct for design mistakes.
+to evolve more quickly and more effectively to correct for design mistakes.
 
 
 Questions and answers
 =====================
 
-Q1: Won't backward compatibility features lead to lots of cruft and
+Q1: Does this PEP require that Python keep two possible sets of semantics
+for each backward-incompatible feature forever?
+
+A1: Definitely not. Legacy features can still be phased out when
+appropriate -- that is, when the majority of the user-base has
+migrated to the newer Python version. This PEP merely proposes to
+shift the emphasis of the development effort directed at compatibility
+from 100% forwards to at least 50% backwards. Backwards compatibility
+is the more powerful of the two concepts for allowing a user-base to
+adopt the latest Python interpreter version.
+
+Notice that it has been a long time since users have cared about
+backwards compatibility for non-nested scopes, because very few users
+are stuck with Python 2.1.
+
+Q2: But Python-dev is already overwhelmed and doesn't have the
+bandwidth to implement / maintain the additional complexity!
+
+A2: Python-dev can ask the community of developers to step up and
+maintain backward compatibility in Python for legacy language features
+they care about. When the community stops caring about a particular
+obsolete behaviour, Python-dev can stop caring too. 
+
+The ``__past__`` mechanism could possibly be designed to be extensible
+by the community, e.g.  as a standard but "blessed" PyPI package, to
+reduce the load on the core developers.
+
+Q3: Won't backward compatibility features lead to lots of cruft and
 bloat and baggage in Python?
 
-A1: Not necessarily. First, proposals for new compatibility-breaking
+A3: Not necessarily. First, proposals for new compatibility-breaking
 features in Python could be evaluated partly on the simplicity and
 maintainability of the implementation of their associated ``__past__``
 feature up-front.
@@ -250,24 +282,9 @@ def old_div(a, b):
 ```
 
 Bundling such a function with Python 3.x versions, together with
-providing a simple mechanism to invoke it for every appearance of ``a
-/ b`` would not be difficult.
-
-Third, this PEP does not require that a feature once supported must be
-supported forever. Legacy features can be phased out when appropriate.
-Notice that reintroducing compatibility for non-nested scopes or
-classic classes or into Python 3.6 would likely help nobody.
-
-
-Q2: But Python-dev is already overwhelmed and doesn't have the
-bandwidth to implement / maintain the additional complexity!
-
-A2: Python-dev can ask the community of developers to step up and
-maintain backward compatibility in Python for legacy language features
-they care about. When the community stops caring about a particular
-obsolete behaviour, Python-dev can stop caring too. The ``__past__``
-mechanism could be designed to be extensible by the community to
-reduce the load on the core developers.
+a simple mechanism to invoke it for every appearance of ``a
+/ b`` after an appropriate ``__past__`` invocation, would not be
+onerous.
 
 
 Copyright
